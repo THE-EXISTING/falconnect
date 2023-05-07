@@ -1,0 +1,25 @@
+name: falconnect
+description: A new Flutter package project.
+version: 1.0.0
+
+environment:
+  sdk: '>=2.19.3 <3.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  falmodel:
+    path: ../falmodel
+  faltool:
+    path: ../faltool
+  flutter_lints: ^2.0.1
+  dio: ^5.0.2
+  web_socket_channel: ^2.4.0
+  connectivity_plus: ^3.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
