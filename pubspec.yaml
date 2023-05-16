@@ -14,7 +14,7 @@ dependencies:
   faltool:
     path: ../faltool
   flutter_lints: ^2.0.1
-  dio: ^5.0.2
+  dio: ^5.1.2
   web_socket_channel: ^2.4.0
   connectivity_plus: ^3.0.6
 
