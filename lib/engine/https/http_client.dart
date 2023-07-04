@@ -2,10 +2,13 @@ import 'package:falconnect/lib.dart';
 
 abstract class BaseHttpClient implements RequestApiService {
   late final Dio _dio;
+  final Connectivity _connectivity;
 
-  BaseHttpClient({required Dio dio}) {
-    _dio = dio;
-
+  BaseHttpClient({
+    required Dio dio,
+    Connectivity? connectivity,
+  })  : _dio = dio,
+        _connectivity = connectivity ?? Connectivity() {
     //check bad certificate
     if (_dio.httpClientAdapter is IOHttpClientAdapter) {
       (_dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
@@ -69,7 +72,11 @@ abstract class BaseHttpClient implements RequestApiService {
     bool isUseToken = true,
     required FutureOr<T> Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
-  }) {
+  }) async {
+    final connectionResult = await _connectivity.checkConnectivity();
+    if (connectionResult == ConnectivityResult.none) {
+      throw NoInternetConnectionException(service: path);
+    }
     AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
     tokenInterceptor?.isUseToken = isUseToken;
     return _dio
@@ -96,7 +103,11 @@ abstract class BaseHttpClient implements RequestApiService {
     bool isUseToken = true,
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
-  }) {
+  }) async {
+    final connectionResult = await _connectivity.checkConnectivity();
+    if (connectionResult == ConnectivityResult.none) {
+      throw NoInternetConnectionException(service: path);
+    }
     AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
     tokenInterceptor?.isUseToken = isUseToken;
     return _dio
@@ -125,7 +136,11 @@ abstract class BaseHttpClient implements RequestApiService {
     bool isUseToken = true,
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
-  }) {
+  }) async {
+    final connectionResult = await _connectivity.checkConnectivity();
+    if (connectionResult == ConnectivityResult.none) {
+      throw NoInternetConnectionException(service: path);
+    }
     AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
     tokenInterceptor?.isUseToken = isUseToken;
     return _dio
@@ -154,7 +169,11 @@ abstract class BaseHttpClient implements RequestApiService {
     bool isUseToken = true, // Please
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
-  }) {
+  }) async {
+    final connectionResult = await _connectivity.checkConnectivity();
+    if (connectionResult == ConnectivityResult.none) {
+      throw NoInternetConnectionException(service: path);
+    }
     AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
     tokenInterceptor?.isUseToken = isUseToken;
     return _dio
@@ -183,7 +202,11 @@ abstract class BaseHttpClient implements RequestApiService {
     bool isUseToken = true,
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
-  }) {
+  }) async {
+    final connectionResult = await _connectivity.checkConnectivity();
+    if (connectionResult == ConnectivityResult.none) {
+      throw NoInternetConnectionException(service: path);
+    }
     AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
     tokenInterceptor?.isUseToken = isUseToken;
     return _dio
@@ -210,7 +233,11 @@ abstract class BaseHttpClient implements RequestApiService {
     bool isUseToken = true,
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
-  }) {
+  }) async {
+    final connectionResult = await _connectivity.checkConnectivity();
+    if (connectionResult == ConnectivityResult.none) {
+      throw NoInternetConnectionException(service: path);
+    }
     AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
     tokenInterceptor?.isUseToken = isUseToken;
     return _dio
