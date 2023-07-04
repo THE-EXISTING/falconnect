@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
-import 'package:falconnect/falconnect.dart';
-import 'package:falconnect/utils/nlog.dart';
+// ignore_for_file: constant_identifier_names
+
+import 'package:falconnect/lib.dart';
 
 class CacheInterceptor extends Interceptor {
   static const TAG = 'CacheInterceptor';
@@ -29,7 +29,7 @@ class CacheInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     NLog.e(TAG, 'onError: $err', err);
     super.onError(err, handler);
   }

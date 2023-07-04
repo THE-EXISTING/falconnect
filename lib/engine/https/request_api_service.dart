@@ -1,4 +1,4 @@
-import 'package:falconnect/falconnect.dart';
+import 'package:falconnect/lib.dart';
 import 'package:falmodel/falmodel.dart';
 
 abstract class RequestApiService {
@@ -8,17 +8,17 @@ abstract class RequestApiService {
     Options? options,
     bool isUseToken = true,
     required T Function(Map<String, dynamic> json) converter,
-    T? Function(DioError exception, StackTrace? stackTrace)? catchError,
+    T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   });
 
   Future<Response<T>> post<T>(
     String endPoint, {
-    RequestBodyX? data,
+    BaseRequestBody? data,
     Options? options,
     bool isUseToken = true,
     Map<String, Object>? queryParameters,
     required T Function(Map<String, dynamic> json) converter,
-    T? Function(DioError exception, StackTrace? stackTrace)? catchError,
+    T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   });
 
   Future<Response<T>> postFormData<T>(
@@ -27,16 +27,16 @@ abstract class RequestApiService {
     Options? options,
     bool isUseToken = true,
     required T Function(Map<String, dynamic> json) converter,
-    T? Function(DioError exception, StackTrace? stackTrace)? catchError,
+    T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   });
 
   Future<Response<T>> put<T>(
     String endPoint, {
-    RequestBodyX? data,
+    BaseRequestBody? data,
     Options? options,
     bool isUseToken = true,
     required T Function(Map<String, dynamic> json) converter,
-    T? Function(DioError exception, StackTrace? stackTrace)? catchError,
+    T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   });
 
   Future<Response<T>> putFormData<T>(
@@ -45,16 +45,16 @@ abstract class RequestApiService {
     Options? options,
     bool isUseToken = true,
     required T Function(Map<String, dynamic> json) converter,
-    T? Function(DioError exception, StackTrace? stackTrace)? catchError,
+    T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   });
 
   Future<Response<T>> delete<T>(
     String endPoint, {
-    RequestBodyX? data,
+        BaseRequestBody? data,
     Map<String, Object>? queryParameters,
     Options? options,
     bool isUseToken = true,
     required T Function(Map<String, dynamic> json) converter,
-    T? Function(DioError exception, StackTrace? stackTrace)? catchError,
+    T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   });
 }

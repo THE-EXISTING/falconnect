@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:falconnect/falconnect.dart';
-import 'package:falmodel/falmodel.dart';
-import 'package:faltool/faltool.dart';
+import 'package:falconnect/lib.dart';
 
 class SocketLogInterceptor extends SocketInterceptor {
   SocketLogInterceptor({
@@ -49,7 +46,7 @@ class SocketLogInterceptor extends SocketInterceptor {
   }
 
   @override
-  void onResponse(SocketResponseX response) async {
+  void onResponse(SocketResponse response) async {
     if (!kReleaseMode) {
       logPrint(_title('*** Socket Response ↙️ ***'));
       _printResponse(response);
@@ -72,7 +69,7 @@ class SocketLogInterceptor extends SocketInterceptor {
     }
   }
 
-  void _printResponse(SocketResponseX response) {
+  void _printResponse(SocketResponse response) {
     if (!kReleaseMode) {
       _printKV('URL', response.requestOptions.uri);
       _printKV('Protocol', response.requestOptions.protocol);

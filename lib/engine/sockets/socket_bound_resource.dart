@@ -1,9 +1,6 @@
-import 'dart:async';
-import 'package:falconnect/falconnect.dart';
-import 'package:falconnect/utils/nlog.dart';
-import 'package:falmodel/falmodel.dart';
-import 'package:faltool/faltool.dart';
-import 'package:falconnect/falconnect.dart';
+// ignore_for_file: constant_identifier_names
+
+import 'package:falconnect/lib.dart';
 
 class SocketBoundResource<EntityType, ResponseType> {
   SocketBoundResource._();
@@ -29,12 +26,12 @@ class SocketBoundResource<EntityType, ResponseType> {
         try {
           error?.call(exception, stackTrace);
         } on Exception catch (newException) {
-          sink.add(BlocState.exception(
+          sink.add(BlocState.fail(
               data: null, error: newException, stackTrace: stackTrace));
           return;
         }
         NLog.e(TAG, 'Operation failed', exception);
-        sink.add(BlocState.exception(
+        sink.add(BlocState.fail(
             data: null, error: exception, stackTrace: stackTrace));
       }
     }

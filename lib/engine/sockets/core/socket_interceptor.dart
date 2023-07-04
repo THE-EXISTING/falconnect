@@ -1,6 +1,5 @@
 import 'dart:collection';
-import 'package:falconnect/falconnect.dart';
-import 'package:falmodel/falmodel.dart';
+import 'package:falconnect/lib.dart';
 
 class SocketInterceptors extends ListMixin<SocketInterceptor> {
   final _list = <SocketInterceptor>[];
@@ -28,7 +27,7 @@ abstract class SocketInterceptor {
 
   void onRequest(SocketOptions options);
 
-  void onResponse(SocketResponseX response);
+  void onResponse(SocketResponse response);
 
   void onError(SocketException err, SocketOptions options);
 }

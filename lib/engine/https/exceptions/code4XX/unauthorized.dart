@@ -1,4 +1,4 @@
-import 'package:falconnect/falconnect.dart';
+import 'package:falconnect/lib.dart';
 
 class UnauthorizedException extends Network4XXException {
   const UnauthorizedException(

@@ -1,4 +1,4 @@
-import 'package:falconnect/falconnect.dart';
+import 'package:falconnect/lib.dart';
 import 'package:falmodel/falmodel.dart';
 import 'package:faltool/faltool.dart';
 
@@ -11,7 +11,7 @@ class SocketException implements Exception {
   });
 
   final String? message;
-  final SocketResponseX? response;
+  final SocketResponse? response;
   final Exception? exception;
   final StackTrace? stackTrace;
 

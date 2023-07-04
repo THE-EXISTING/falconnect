@@ -1,4 +1,4 @@
-import 'package:falconnect/falconnect.dart';
+import 'package:falconnect/lib.dart';
 
 class Network5XXException extends NetworkException {
   const Network5XXException({

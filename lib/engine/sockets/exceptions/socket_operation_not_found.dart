@@ -1,10 +1,10 @@
-import 'package:falconnect/falconnect.dart';
+import 'package:falconnect/lib.dart';
 import 'package:falmodel/falmodel.dart';
 import 'package:faltool/faltool.dart';
 
 class SocketOperationNotFound extends SocketException {
   const SocketOperationNotFound({
-    SocketResponseX? response,
+    SocketResponse? response,
     String? message,
     Exception? exception,
     StackTrace? stackTrace,

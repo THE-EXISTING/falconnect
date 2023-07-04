@@ -1,10 +1,10 @@
-import 'package:falconnect/falconnect.dart';
+import 'package:falconnect/lib.dart';
 import 'package:flutter/foundation.dart';
 
-abstract class TokenInterceptorX extends InterceptorsWrapper {
-  TokenInterceptorX({required int retryAccessTokenLimit})
+abstract class AccessTokenInterceptor extends InterceptorsWrapper {
+  AccessTokenInterceptor({required int retryAccessTokenLimit})
       : _retryAccessTokenLimit = retryAccessTokenLimit,
-        retryAccessTokenLimitCounter = retryAccessTokenLimit;
+        _retryAccessTokenCounter = retryAccessTokenLimit;
 
   String? _accessToken;
   String? refreshToken;
@@ -13,7 +13,7 @@ abstract class TokenInterceptorX extends InterceptorsWrapper {
   int get tokenErrorCode;
 
   final int _retryAccessTokenLimit;
-  int retryAccessTokenLimitCounter;
+  int _retryAccessTokenCounter;
 
   set accessToken(String? value) {
     _accessToken = value;
@@ -42,14 +42,14 @@ abstract class TokenInterceptorX extends InterceptorsWrapper {
     if (response.statusCode == tokenErrorCode) {
       onHandleTokenResponse(response, handler);
     } else {
-      retryAccessTokenLimitCounter = _retryAccessTokenLimit;
+      _retryAccessTokenCounter = _retryAccessTokenLimit;
       super.onResponse(response, handler);
     }
   }
 
   @protected
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == tokenErrorCode) {
       onHandleTokenError(err, handler);
     } else {
@@ -60,5 +60,5 @@ abstract class TokenInterceptorX extends InterceptorsWrapper {
   void onHandleTokenResponse(
       Response response, ResponseInterceptorHandler handler);
 
-  void onHandleTokenError(DioError err, ErrorInterceptorHandler handler);
+  void onHandleTokenError(DioException err, ErrorInterceptorHandler handler);
 }

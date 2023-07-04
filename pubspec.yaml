@@ -10,13 +10,19 @@ dependencies:
   flutter:
     sdk: flutter
   falmodel:
-    path: ../falmodel
+    git:
+      url: https://github.com/THE-EXISTING/falmodel.git
+      ref: develop
   faltool:
-    path: ../faltool
-  flutter_lints: ^2.0.1
-  dio: ^5.1.2
+    git:
+      url: https://github.com/THE-EXISTING/faltool.git
+      ref: develop
+
+  ansicolor: ^2.0.1
+  flutter_lints: ^2.0.2
+  dio: ^5.2.1+1
   web_socket_channel: ^2.4.0
-  connectivity_plus: ^3.0.6
+  connectivity_plus: ^4.0.1
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,4 @@
-import 'package:falconnect/falconnect.dart';
+import 'package:falconnect/lib.dart';
 
 class AuthorizedNotFoundException extends NetworkException {
   const AuthorizedNotFoundException(

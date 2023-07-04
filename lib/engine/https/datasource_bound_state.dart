@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:falconnect/falconnect.dart';
+import 'package:falconnect/lib.dart';
 
 class DatasourceBoundState<EntityType, ResponseType> {
   DatasourceBoundState._();
@@ -46,13 +46,13 @@ class DatasourceBoundState<EntityType, ResponseType> {
             error?.call(exception, stackTrace);
           } catch (newException, stackTrace) {
             if (newException is Exception) {
-              yield BlocState.exception(
+              yield BlocState.fail(
                   data: null, error: newException, stackTrace: stackTrace);
               return;
             }
           }
           NLog.e(TAG, 'Fetching failed', exception);
-          yield BlocState.exception(
+          yield BlocState.fail(
               data: null, error: exception, stackTrace: stackTrace);
         }
         return;

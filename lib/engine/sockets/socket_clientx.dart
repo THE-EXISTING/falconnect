@@ -1,13 +1,9 @@
-import 'dart:async';
-import 'package:falconnect/falconnect.dart';
-import 'package:falconnect/utils/nlog.dart';
-import 'package:falmodel/falmodel.dart';
-import 'package:faltool/faltool.dart';
+import 'package:falconnect/lib.dart';
 
-abstract class SocketClientX implements RequestSocketService {
+abstract class SocketClient implements RequestSocketService {
   static const TAG = 'SocketChannel';
   late SocketOptions _tmpOptions;
-  late PublishSubject<SocketResponseX> _replaySubject;
+  late PublishSubject<SocketResponse> _replaySubject;
   late int _retryLimitCounter;
   late final SocketInterceptors interceptors;
 
@@ -21,10 +17,10 @@ abstract class SocketClientX implements RequestSocketService {
 
   SocketOptions get options => _tmpOptions;
 
-  SocketClientX(String baseUrl) {
+  SocketClient(String baseUrl) {
     _tmpOptions = SocketOptions();
     _tmpOptions.uri = baseUrl;
-    _replaySubject = PublishSubject<SocketResponseX>();
+    _replaySubject = PublishSubject<SocketResponse>();
     _retryLimitCounter = _tmpOptions.retryLimit;
     interceptors = SocketInterceptors();
     setupConfig(_tmpOptions);
@@ -111,16 +107,16 @@ abstract class SocketClientX implements RequestSocketService {
 
   @override
   Stream<T> getResponseStream<T>({
-    bool Function(SocketResponseX response)? filter,
-    required T Function(SocketResponseX response) converter,
+    bool Function(SocketResponse response)? filter,
+    required T Function(SocketResponse response) converter,
   }) =>
       _replaySubject.stream
           .where(filter ?? (data) => true)
           .asyncMap((response) => converter(response));
 
   @override
-  Stream<SocketResponseX> getRawStream({
-    bool Function(SocketResponseX response)? filter,
+  Stream<SocketResponse> getRawStream({
+    bool Function(SocketResponse response)? filter,
   }) =>
       _replaySubject.stream.where(filter ?? (data) => true);
 
@@ -136,7 +132,7 @@ abstract class SocketClientX implements RequestSocketService {
 
   void _onResponse(response) {
     _retryLimitCounter = _tmpOptions.retryLimit;
-    final responseWrap = SocketResponseX(
+    final responseWrap = SocketResponse(
       data: response,
       requestOptions: _tmpOptions.copyWith(),
     );
@@ -153,7 +149,7 @@ abstract class SocketClientX implements RequestSocketService {
   }
 
   void _executeInterceptorOnResponse({
-    required SocketResponseX response,
+    required SocketResponse response,
   }) {
     for (var interceptor in interceptors) {
       interceptor.onResponse(response);

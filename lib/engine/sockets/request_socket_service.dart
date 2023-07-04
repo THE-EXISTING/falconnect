@@ -1,5 +1,4 @@
-import 'package:falconnect/falconnect.dart';
-import 'package:falmodel/falmodel.dart';
+import 'package:falconnect/lib.dart';
 import 'package:faltool/faltool.dart';
 
 abstract class RequestSocketService {
@@ -10,11 +9,11 @@ abstract class RequestSocketService {
   Future<void> closeChannel();
 
   Stream<T> getResponseStream<T>({
-    required bool Function(SocketResponseX response) filter,
-    required T Function(SocketResponseX response) converter,
+    required bool Function(SocketResponse response) filter,
+    required T Function(SocketResponse response) converter,
   });
 
-  Stream<SocketResponseX> getRawStream({
-    bool Function(SocketResponseX response)? filter,
+  Stream<SocketResponse> getRawStream({
+    bool Function(SocketResponse response)? filter,
   });
 }

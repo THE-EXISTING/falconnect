@@ -1,4 +1,4 @@
-import 'package:falconnect/falconnect.dart';
+import 'package:falconnect/lib.dart';
 
 class SessionExpiredException extends NetworkException {
   const SessionExpiredException(
