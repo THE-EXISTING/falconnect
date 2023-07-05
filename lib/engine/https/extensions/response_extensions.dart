@@ -1,6 +1,4 @@
-import 'dart:async';
-import 'package:falconnect/falconnect.dart';
-import 'package:falmodel/falmodel.dart';
+import 'package:falconnect/lib.dart';
 
 extension HttpFutureDynamicExtensions<T> on Future<Response<dynamic>> {
   Future<Response<T>> mapJson<T>(
