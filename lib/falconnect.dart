@@ -8,7 +8,7 @@ export 'package:connectivity_plus/connectivity_plus.dart';
 
 export 'engine/network_constant.dart';
 export 'engine/fetches/fetches.dart';
-export 'engine/https/datasource_bound_state.dart';
+export 'engine/https/datasource_bound_bloc_state.dart';
 export 'engine/https/http_client.dart';
 
 export 'engine/https/extensions/extensions.dart';

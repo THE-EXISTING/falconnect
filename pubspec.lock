@@ -150,7 +150,7 @@ packages:
     description:
       path: "."
       ref: develop
-      resolved-ref: "183a218a132c09ac460a0904ad1cfdff7909e6cf"
+      resolved-ref: "8092cd2a98dc4b4f9601dcbb6bb659502aeb751a"
       url: "https://github.com/THE-EXISTING/falmodel.git"
     source: git
     version: "1.0.0"
@@ -159,7 +159,7 @@ packages:
     description:
       path: "."
       ref: develop
-      resolved-ref: "52e20cd19233b4a1fd354d8650c77bcfc6026493"
+      resolved-ref: dd998650d570ceccddd50d14d42971de0e7597e4
       url: "https://github.com/THE-EXISTING/faltool.git"
     source: git
     version: "1.0.0"
