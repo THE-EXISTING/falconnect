@@ -1,22 +1,28 @@
 import 'package:falconnect/lib.dart';
 
-class Fetcher<T extends BlocState> {
+class EitherFetcher<T> {
   StreamSubscriptionWrapper? subscription;
 
   bool get isClose => subscription?.isClosed ?? true;
 
   Future<void> fetch(
-    Stream<T> call, {
-    required Function(T data) onFetch,
+    Stream<Either<Object, T>> call, {
+    required Function(WidgetDataState<T?> data) onFetch,
     Function? onFail,
   }) async {
+    onFetch(WidgetDataState(WidgetDisplayState.loading, null));
+
     if (subscription != null) {
       subscription?.cancel();
     }
-    subscription = StreamSubscriptionWrapper<T>(
+    subscription = StreamSubscriptionWrapper<Either<Object, T>>(
       call,
-      onData: (T data) {
-        onFetch(data);
+      onData: (Either<Object, T> data) {
+        data.fold(
+          (Object fail) => onFail?.call(fail),
+          (T data) =>
+              onFetch(WidgetDataState(WidgetDisplayState.success, data)),
+        );
       },
       onError: onFail ??
           (error, stacktrace) {

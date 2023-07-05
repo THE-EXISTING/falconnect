@@ -1,12 +1,12 @@
 import 'package:falconnect/lib.dart';
 
 class FetcherList {
-  final Map<dynamic, Fetcher> _fetcherMap = {};
+  final Map<dynamic, EitherFetcher> _fetcherMap = {};
 
-  Future<void> fetch<T extends BlocState>({
+  Future<void> fetchStream<T>({
     required Object key,
-    required Stream<T> call,
-    required Function(T data) onFetch,
+    required Stream<Either<Object, T>> call,
+    required Function(WidgetDataState<T?> data) onFetch,
     Function? onFail,
     bool debounceFetch = true,
   }) async {
@@ -14,11 +14,11 @@ class FetcherList {
 
     if (!debounceFetch) await _forceCloseFetcherByKey(key);
 
-    Fetcher<T>? fetcher = _fetcherMap[key] as Fetcher<T>?;
+    EitherFetcher<T>? fetcher = _fetcherMap[key] as EitherFetcher<T>?;
 
     if (fetcher != null && debounceFetch) return;
     if (fetcher == null) {
-      fetcher = Fetcher<T>();
+      fetcher = EitherFetcher<T>();
       _fetcherMap[key] = fetcher;
     }
 
@@ -28,6 +28,21 @@ class FetcherList {
       onFail: onFail,
     );
   }
+
+  Future<void> fetchFuture<T>({
+    required Object key,
+    required Future<Either<Object, T>> call,
+    required Function(WidgetDataState<T?> data) onFetch,
+    Function(Object fail)? onFail,
+    bool debounceFetch = true,
+  }) =>
+      fetchStream<T>(
+        key: key,
+        call: Stream.fromFuture(call),
+        onFetch: onFetch,
+        onFail: onFail,
+        debounceFetch: debounceFetch,
+      );
 
   Future<void> _forceCloseFetcherByKey(dynamic key) async {
     final fetcher = _fetcherMap[key];
