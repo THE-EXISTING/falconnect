@@ -8,7 +8,7 @@ class EitherFetcher<T> {
   Future<void> fetch(
     Stream<Either<Object, T>> call, {
     required Function(WidgetDataState<T?> data) onFetch,
-    Function? onFail,
+    Function(Object failure)? onFail,
   }) async {
     onFetch(WidgetDataState(WidgetDisplayState.loading, null));
 
