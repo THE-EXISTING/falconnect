@@ -7,10 +7,10 @@ class EitherFetcher<T> {
 
   Future<void> fetch(
     Stream<Either<Object, T>> call, {
-    required Function(WidgetDataState<T?> data) onFetch,
+    required Function(WidgetState<T?> data) onFetch,
     Function(Object failure)? onFail,
   }) async {
-    onFetch(WidgetDataState(WidgetDisplayState.loading, null));
+    onFetch(WidgetState(WidgetStatus.loading, data: null));
 
     if (subscription != null) {
       subscription?.cancel();
@@ -20,8 +20,7 @@ class EitherFetcher<T> {
       onData: (Either<Object, T> data) {
         data.fold(
           (Object fail) => onFail?.call(fail),
-          (T data) =>
-              onFetch(WidgetDataState(WidgetDisplayState.success, data)),
+          (T data) => onFetch(WidgetState(WidgetStatus.success, data: data)),
         );
       },
       onError: onFail ??
