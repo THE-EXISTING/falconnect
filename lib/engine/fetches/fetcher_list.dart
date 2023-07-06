@@ -5,9 +5,9 @@ class FetcherList {
 
   Future<void> fetchStream<T>({
     required Object key,
-    required Stream<Either<Object, T>> call,
+    required Stream<Either<Failure, T>> call,
     required Function(WidgetState<T?> data) onFetch,
-    Function(Object failure)? onFail,
+    Function(Failure failure)? onFail,
     bool debounceFetch = true,
   }) async {
     _removeFetcherIfClose();
@@ -31,9 +31,9 @@ class FetcherList {
 
   Future<void> fetchFuture<T>({
     required Object key,
-    required Future<Either<Object, T>> call,
+    required Future<Either<Failure, T>> call,
     required Function(WidgetState<T?> data) onFetch,
-    Function(Object failure)? onFail,
+    Function(Failure failure)? onFail,
     bool debounceFetch = true,
   }) =>
       fetchStream<T>(

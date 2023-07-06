@@ -6,20 +6,20 @@ class EitherFetcher<T> {
   bool get isClose => subscription?.isClosed ?? true;
 
   Future<void> fetch(
-    Stream<Either<Object, T>> call, {
+    Stream<Either<Failure, T>> call, {
     required Function(WidgetState<T?> data) onFetch,
-    Function(Object failure)? onFail,
+    Function(Failure failure)? onFail,
   }) async {
     onFetch(WidgetState(WidgetStatus.loading, data: null));
 
     if (subscription != null) {
       subscription?.cancel();
     }
-    subscription = StreamSubscriptionWrapper<Either<Object, T>>(
+    subscription = StreamSubscriptionWrapper<Either<Failure, T>>(
       call,
-      onData: (Either<Object, T> data) {
+      onData: (Either<Failure, T> data) {
         data.fold(
-          (Object fail) => onFail?.call(fail),
+          (Failure fail) => onFail?.call(fail),
           (T data) => onFetch(WidgetState(WidgetStatus.success, data: data)),
         );
       },
