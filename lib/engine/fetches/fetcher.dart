@@ -23,10 +23,13 @@ class EitherFetcher<T> {
           (T data) => onFetch(WidgetState(WidgetStatus.success, data: data)),
         );
       },
-      onError: onFail ??
-          (error, stacktrace) {
-            Log.e(error, stacktrace);
-          },
+      onError: (error, stacktrace) {
+        if (onFail == null) Log.e(error, stacktrace);
+        onFail?.call(Failure.fromException(
+          exception: error,
+          stacktrace: stacktrace,
+        ));
+      },
       onDone: () {
         Log.success('Fetch onDone');
       },
