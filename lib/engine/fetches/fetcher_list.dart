@@ -6,8 +6,6 @@ class FetcherList {
   Stream<WidgetState<T?>> fetchStream<T>({
     required Object key,
     required Stream<Either<Failure, T>> call,
-    // required Function(WidgetState<T?> data) onFetch,
-    // Function(Failure failure)? onFail,
     bool debounceFetch = true,
   }) {
     if (_canFetch(key, debounceFetch)) {
@@ -15,39 +13,19 @@ class FetcherList {
       _fetcherMap[key] = fetcher;
       return fetcher.fetch(call);
     } else {
-      Log.w('Debounce fetch use same stream !!!');
+      Log.w('Debounce fetch, use same stream !!!');
       return (_fetcherMap[key]! as EitherFetcher<T>).stream;
     }
-
-    // if (!debounceFetch) _forceCloseFetcherByKey(key);
-    //
-    // EitherFetcher<T>? fetcher = _fetcherMap[key] as EitherFetcher<T>?;
-    //
-    // if (fetcher != null && debounceFetch) return;
-    // if (fetcher == null) {
-    //   fetcher = EitherFetcher<T>();
-    //   _fetcherMap[key] = fetcher;
-    // }
-    //
-    // return fetcher.fetch(
-    //   call,
-    //   // onFetch: onFetch,
-    //   // onFail: onFail,
-    // );
   }
 
   Stream<WidgetState<T?>> fetchFuture<T>({
     required Object key,
     required Future<Either<Failure, T>> call,
-    // required Function(WidgetState<T?> data) onFetch,
-    // Function(Failure failure)? onFail,
     bool debounceFetch = true,
   }) =>
       fetchStream<T>(
         key: key,
         call: Stream.fromFuture(call),
-        // onFetch: onFetch,
-        // onFail: onFail,
         debounceFetch: debounceFetch,
       );
 
