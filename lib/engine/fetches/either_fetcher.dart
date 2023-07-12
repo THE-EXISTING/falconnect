@@ -4,7 +4,6 @@ class EitherFetcher<T> {
   EitherFetcher([StreamController<WidgetState<T?>>? controller])
       : _streamController = controller ?? StreamController<WidgetState<T?>>();
 
-  StreamSubscriptionWrapper? subscription;
   int _count = 0;
 
   bool get isClose => _streamController.isClosed;
@@ -32,14 +31,10 @@ class EitherFetcher<T> {
             Log.success('Fetch onDone');
             _streamController.close();
           },
-          // handleError: (error, stackTrace, sink) {
-          //   rethrow error, stackTrace;
-          // },
         ));
   }
 
   void close() {
     _streamController.close();
-    subscription?.cancel();
   }
 }
