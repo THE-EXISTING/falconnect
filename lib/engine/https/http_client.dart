@@ -15,9 +15,6 @@ abstract class BaseHttpClient implements RequestApiService {
 
   Dio get dio => _dio;
 
-  Future<ConnectivityResult> get checkConnectivity =>
-      _connectivity.checkConnectivity();
-
   void setupBaseUrl(String baseUrl) {
     _dio.options.baseUrl = baseUrl;
   }
@@ -25,6 +22,9 @@ abstract class BaseHttpClient implements RequestApiService {
   void setupConfig(Dio dio, BaseOptions config) {}
 
   void setupInterceptors(Dio dio, Interceptors interceptors) {}
+
+  Future<ConnectivityResult> checkConnectivity() =>
+      _connectivity.checkConnectivity();
 
   BaseOptions get config => _dio.options;
 
