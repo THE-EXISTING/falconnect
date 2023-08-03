@@ -13,6 +13,8 @@ abstract class BaseHttpClient implements RequestApiService {
     setupInterceptors(_dio, _dio.interceptors);
   }
 
+  Dio get dio => _dio;
+
   void setupBaseUrl(String baseUrl) {
     _dio.options.baseUrl = baseUrl;
   }
