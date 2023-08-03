@@ -2,13 +2,11 @@ import 'package:falconnect/lib.dart';
 
 abstract class BaseHttpClient implements RequestApiService {
   late final Dio _dio;
-  final Connectivity _connectivity;
 
   BaseHttpClient({
     required Dio dio,
     Connectivity? connectivity,
-  })  : _dio = dio,
-        _connectivity = connectivity ?? Connectivity() {
+  }) : _dio = dio {
     setupConfig(_dio, _dio.options);
     setupInterceptors(_dio, _dio.interceptors);
   }
@@ -22,9 +20,6 @@ abstract class BaseHttpClient implements RequestApiService {
   void setupConfig(Dio dio, BaseOptions config) {}
 
   void setupInterceptors(Dio dio, Interceptors interceptors) {}
-
-  Future<ConnectivityResult> checkConnectivity() =>
-      _connectivity.checkConnectivity();
 
   BaseOptions get config => _dio.options;
 
@@ -68,10 +63,6 @@ abstract class BaseHttpClient implements RequestApiService {
     required FutureOr<T> Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
     return _dio
         .get(
           path,
@@ -97,10 +88,6 @@ abstract class BaseHttpClient implements RequestApiService {
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
     return _dio
         .post(
           path,
@@ -128,10 +115,6 @@ abstract class BaseHttpClient implements RequestApiService {
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
     return _dio
         .post(
           path,
@@ -147,31 +130,27 @@ abstract class BaseHttpClient implements RequestApiService {
 
   @override
   Future<Response<T>> patch<T>(
-      String path, {
-        BaseRequestBody? data,
-        Map<String, Object>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-        ProgressCallback? onSendProgress,
-        ProgressCallback? onReceiveProgress,
-        bool isUseToken = true,
-        required T Function(Map<String, dynamic> json) converter,
-        T? Function(DioException exception, StackTrace? stackTrace)? catchError,
-      }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
+    String path, {
+    BaseRequestBody? data,
+    Map<String, Object>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+    bool isUseToken = true,
+    required T Function(Map<String, dynamic> json) converter,
+    T? Function(DioException exception, StackTrace? stackTrace)? catchError,
+  }) async {
     return _dio
         .patch(
-      path,
-      queryParameters: queryParameters,
-      data: data?.toJson(),
-      options: options,
-      cancelToken: cancelToken,
-      onReceiveProgress: onReceiveProgress,
-      onSendProgress: onSendProgress,
-    )
+          path,
+          queryParameters: queryParameters,
+          data: data?.toJson(),
+          options: options,
+          cancelToken: cancelToken,
+          onReceiveProgress: onReceiveProgress,
+          onSendProgress: onSendProgress,
+        )
         .mapJson((json) => converter(json))
         .catchWhenError(catchError);
   }
@@ -190,10 +169,6 @@ abstract class BaseHttpClient implements RequestApiService {
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
     return _dio
         .put(
           path,
@@ -221,10 +196,6 @@ abstract class BaseHttpClient implements RequestApiService {
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
     return _dio
         .put(
           path,
@@ -250,10 +221,6 @@ abstract class BaseHttpClient implements RequestApiService {
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
     return _dio
         .delete(
           path,
