@@ -2,39 +2,34 @@ import 'package:falconnect/lib.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class AccessTokenInterceptor extends InterceptorsWrapper {
-  AccessTokenInterceptor({required int retryAccessTokenLimit})
-      : _retryAccessTokenLimit = retryAccessTokenLimit,
-        _retryAccessTokenCounter = retryAccessTokenLimit;
+  AccessTokenInterceptor({required this.retryAccessTokenLimit})
+      : retryCounter = 0;
 
-  String? _accessToken;
+  String? accessToken;
   String? refreshToken;
-  bool isUseToken = true;
+  final int retryAccessTokenLimit;
+  int retryCounter;
+
+  // bool isUseToken = true;
 
   int get tokenErrorCode;
 
-  final int _retryAccessTokenLimit;
-  int _retryAccessTokenCounter;
-
-  set accessToken(String? value) {
-    _accessToken = value;
-  }
-
   bool get hasAccessToken =>
-      _accessToken != null && _accessToken?.isNotEmpty == true;
+      accessToken != null && accessToken?.isNotEmpty == true;
 
   bool get hasRefreshToken =>
       refreshToken != null && refreshToken?.isNotEmpty == true;
 
-  @override
-  void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
-    if (hasAccessToken && isUseToken) {
-      options.setHeaderTokenBearer(_accessToken!);
-    } else {
-      options.removeHeaderToken();
-    }
-    super.onRequest(options, handler);
-  }
+  // @override
+  // void onRequest(
+  //     RequestOptions options, RequestInterceptorHandler handler) async {
+  //   if (hasAccessToken && isUseToken) {
+  //     options.setHeaderTokenBearer(accessToken!);
+  //   } else {
+  //     options.removeHeaderToken();
+  //   }
+  //   super.onRequest(options, handler);
+  // }
 
   @protected
   @override
@@ -42,7 +37,7 @@ abstract class AccessTokenInterceptor extends InterceptorsWrapper {
     if (response.statusCode == tokenErrorCode) {
       onHandleTokenResponse(response, handler);
     } else {
-      _retryAccessTokenCounter = _retryAccessTokenLimit;
+      retryCounter = 0;
       super.onResponse(response, handler);
     }
   }
@@ -53,6 +48,7 @@ abstract class AccessTokenInterceptor extends InterceptorsWrapper {
     if (err.response?.statusCode == tokenErrorCode) {
       onHandleTokenError(err, handler);
     } else {
+      retryCounter = 0;
       super.onError(err, handler);
     }
   }

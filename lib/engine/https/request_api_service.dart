@@ -30,6 +30,16 @@ abstract class RequestApiService {
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   });
 
+  Future<Response<T>> patch<T>(
+    String endPoint, {
+    BaseRequestBody? data,
+    Options? options,
+    bool isUseToken = true,
+    Map<String, Object>? queryParameters,
+    required T Function(Map<String, dynamic> json) converter,
+    T? Function(DioException exception, StackTrace? stackTrace)? catchError,
+  });
+
   Future<Response<T>> put<T>(
     String endPoint, {
     BaseRequestBody? data,
@@ -50,7 +60,7 @@ abstract class RequestApiService {
 
   Future<Response<T>> delete<T>(
     String endPoint, {
-        BaseRequestBody? data,
+    BaseRequestBody? data,
     Map<String, Object>? queryParameters,
     Options? options,
     bool isUseToken = true,
