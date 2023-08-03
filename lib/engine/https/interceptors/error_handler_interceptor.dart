@@ -1,28 +1,7 @@
 import 'package:falconnect/lib.dart';
 
 abstract class NetworkErrorHandlerInterceptor extends InterceptorsWrapper {
-  NetworkErrorHandlerInterceptor({Connectivity? connectivity})
-      : _connectivity = connectivity ?? Connectivity();
-
-  final Connectivity _connectivity;
-
-  @override
-  Future<void> onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
-    final result = await _connectivity.checkConnectivity();
-    if (_isNoConnectedInternet(result)) {
-      handler.reject(
-        DioException(
-            requestOptions: options,
-            error: NoInternetConnectionException(service: options.path),
-            stackTrace: Trace.current(),
-            type: DioExceptionType.connectionError,
-            message: 'No internet connection.'),
-      );
-    } else {
-      super.onRequest(options, handler);
-    }
-  }
+  NetworkErrorHandlerInterceptor();
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
@@ -74,7 +53,6 @@ abstract class NetworkErrorHandlerInterceptor extends InterceptorsWrapper {
   }
 
   ///========================= PRIVATE METHOD =========================///
-
   bool _isError(Response? response) =>
       response != null && (response.statusCode ?? 0) >= 300;
 
@@ -107,12 +85,5 @@ abstract class NetworkErrorHandlerInterceptor extends InterceptorsWrapper {
       }
     }
     return null;
-  }
-
-  bool _isNoConnectedInternet(ConnectivityResult result) {
-    return result != ConnectivityResult.wifi &&
-        result != ConnectivityResult.ethernet &&
-        result != ConnectivityResult.mobile &&
-        result != ConnectivityResult.vpn;
   }
 }
