@@ -15,6 +15,9 @@ abstract class BaseHttpClient implements RequestApiService {
 
   Dio get dio => _dio;
 
+  Future<ConnectivityResult> get checkConnectivity =>
+      _connectivity.checkConnectivity();
+
   void setupBaseUrl(String baseUrl) {
     _dio.options.baseUrl = baseUrl;
   }
