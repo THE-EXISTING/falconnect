@@ -1,6 +1,6 @@
 import 'package:falconnect/lib.dart';
 
-abstract class ConnectivityInterceptor extends InterceptorsWrapper {
+class ConnectivityInterceptor extends InterceptorsWrapper {
   ConnectivityInterceptor({Connectivity? connectivity})
       : _connectivity = connectivity ?? Connectivity();
 
