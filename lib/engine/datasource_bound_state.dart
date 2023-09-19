@@ -13,7 +13,7 @@ class DatasourceBoundState<EntityType, ResponseType> {
     bool Function(EntityType? data)? shouldFetch,
     Future<ResponseType> Function()? createCallFuture,
     FutureOr<EntityType> Function(ResponseType response)? processResponse,
-    Future? Function(EntityType item)? saveCallResult,
+    Future? Function(EntityType entity)? saveCallResult,
     Function? error,
   }) async* {
     assert(
