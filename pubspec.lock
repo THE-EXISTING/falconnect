@@ -150,7 +150,7 @@ packages:
     description:
       path: "."
       ref: develop
-      resolved-ref: "7ee415ae47bddf9e251bc6c02b843effb12db621"
+      resolved-ref: "628b6d8cac46f9510510a0454c747245ab29aa05"
       url: "https://github.com/THE-EXISTING/falmodel.git"
     source: git
     version: "1.0.0"
@@ -159,7 +159,7 @@ packages:
     description:
       path: "."
       ref: develop
-      resolved-ref: "806d0aa2cd182870fdc8f0c5999a0b7416ec8f9a"
+      resolved-ref: "46a189dae65ab091ee2cd99253bb9e605af2f2c4"
       url: "https://github.com/THE-EXISTING/faltool.git"
     source: git
     version: "1.0.0"
@@ -374,10 +374,10 @@ packages:
     dependency: "direct main"
     description:
       name: retrofit
-      sha256: "5eedbd8f73697f190dabc88520e0bcf2d3b2d9b9ad5c837f1dbb3ee6172d7709"
+      sha256: "1b42e9dc9073e970fc264777615a113c45afca2ff6e998a26b9479582ee275b5"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "4.0.2"
   rxdart:
     dependency: transitive
     description:
