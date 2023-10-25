@@ -19,15 +19,15 @@ dependencies:
       ref: develop
 
   #PLATFORM: All
-  ansicolor: ^2.0.1
-  flutter_lints: ^2.0.3
+  ansicolor: ^2.0.2
   dio: ^5.3.3
-  retrofit: ^4.0.2
+  retrofit: ^4.0.3
   web_socket_channel: ^2.4.0
-  connectivity_plus: ^4.0.2
+  connectivity_plus: ^5.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^2.0.3
 
 flutter:
