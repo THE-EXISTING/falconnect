@@ -29,7 +29,7 @@ class EitherFetcher<T> {
           },
           handleDone: (sink) {
             Log.success('Fetch onDone');
-            _streamController.close();
+            close();
           },
         ));
   }
