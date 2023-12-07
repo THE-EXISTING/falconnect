@@ -1,20 +1,21 @@
 import 'package:falconnect/lib.dart';
 
-class FetcherList {
-  final Map<dynamic, EitherFetcher> _fetcherMap = {};
+class EitherStreamFetcherList {
+  final Map<dynamic, EitherStreamFetcher> _fetcherMap = {};
 
   Stream<WidgetState<T?>> fetchStream<T>({
     required Object key,
     required Stream<Either<Failure, T>> call,
     bool debounceFetch = true,
   }) {
+    _fetcherMap.removeWhere((key, value) => value.isClose);
     if (_canFetch(key, debounceFetch)) {
-      final fetcher = EitherFetcher<T>();
+      final fetcher = EitherStreamFetcher<T>();
       _fetcherMap[key] = fetcher;
       return fetcher.fetch(call);
     } else {
       Log.w('Debounce fetch, use same stream !!!');
-      return (_fetcherMap[key]! as EitherFetcher<T>).stream;
+      return (_fetcherMap[key]! as EitherStreamFetcher<T>).stream;
     }
   }
 
@@ -35,10 +36,10 @@ class FetcherList {
   }
 
   bool _canFetch(Object key, bool debounceFetch) {
-    _fetcherMap.removeWhere((key, value) => value.isClose);
     if (debounceFetch) {
       return _fetcherMap[key] == null;
     } else {
+      // Remove and close old fetcher before.
       final fetcher = _fetcherMap.remove(key);
       fetcher?.close();
       return true;

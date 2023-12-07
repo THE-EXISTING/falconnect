@@ -74,7 +74,7 @@ class DatasourceBoundState<EntityType, ResponseType> {
       EntityType dataFromDb = await loadFromDbFuture();
       NLog.i(TAG, 'Success load data from database');
       if (shouldFetch != null && shouldFetch(dataFromDb)) {
-        NLog.i(TAG, 'Loading... with data from database');
+        NLog.i(TAG, 'Loading... data from network');
         yield Right(dataFromDb);
         yield* fetchData();
       } else {
@@ -86,7 +86,7 @@ class DatasourceBoundState<EntityType, ResponseType> {
       NLog.i(TAG, 'Success load data from database');
       yield Right(dataFromDb);
     } else if (createCallFuture != null) {
-      NLog.i(TAG, 'Loading...');
+      NLog.i(TAG, 'Loading... data from network');
       yield* fetchData();
     } else {
       throw UnimplementedError(
