@@ -1,7 +1,8 @@
 import 'package:falconnect/lib.dart';
 
-class Network5XXException extends NetworkException {
-  const Network5XXException({
+/// Ref: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+class NetworkServerErrorException extends NetworkException {
+  const NetworkServerErrorException({
     required super.code,
     super.message,
     super.developerMessage,

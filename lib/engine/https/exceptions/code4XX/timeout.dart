@@ -1,6 +1,6 @@
 import 'package:falconnect/lib.dart';
 
-class NetworkTimeoutException extends Network4XXException {
+class NetworkTimeoutException extends NetworkClientErrorException {
   const NetworkTimeoutException({
     super.code = 408,
     super.developerMessage,
