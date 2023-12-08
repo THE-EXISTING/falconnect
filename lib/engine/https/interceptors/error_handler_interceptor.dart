@@ -30,7 +30,7 @@ abstract class NetworkErrorHandlerInterceptor extends InterceptorsWrapper {
           err.requestOptions.connectTimeout?.inMilliseconds ?? -1;
       handler.reject(
         err.copyWith(
-          error: NetworkTimeoutException(
+          error: RequestTimeoutException(
             timeout: timeout,
             developerMessage: 'Http Interceptor',
           ),
@@ -123,6 +123,18 @@ abstract class NetworkErrorHandlerInterceptor extends InterceptorsWrapper {
         );
       } else if (code == 404) {
         return NotFoundException(
+          code: code,
+          message: errorMessage ?? response?.statusMessage,
+          developerMessage: 'Http Interceptor',
+        );
+      } else if (code == 405) {
+        return MethodNotAllowedException(
+          code: code,
+          message: errorMessage ?? response?.statusMessage,
+          developerMessage: 'Http Interceptor',
+        );
+      } else if (code == 408) {
+        return RequestTimeoutException(
           code: code,
           message: errorMessage ?? response?.statusMessage,
           developerMessage: 'Http Interceptor',

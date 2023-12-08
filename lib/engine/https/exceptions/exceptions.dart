@@ -7,12 +7,13 @@ export 'code5XX/server_error_exception.dart';
 export 'code5XX/service_unavailable_exception.dart';
 
 export 'code4XX/client_error_exception.dart';
-export 'code4XX/not_found.dart';
-export 'code4XX/session_expired.dart';
-export 'code4XX/bad_request.dart';
-export 'code4XX/forbidden.dart';
-export 'code4XX/unauthorized.dart';
-export 'code4XX/timeout.dart';
+export 'code4XX/not_found_exception.dart';
+export 'code4XX/session_expired_exception.dart';
+export 'code4XX/bad_request_exception.dart';
+export 'code4XX/method_not_allow_exception.dart';
+export 'code4XX/forbidden_exception.dart';
+export 'code4XX/unauthorized_exception.dart';
+export 'code4XX/request_timeout_exception.dart';
 
 export 'network_exception.dart';
 export 'no_internet_connection.dart';
