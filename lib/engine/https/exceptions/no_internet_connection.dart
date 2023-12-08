@@ -5,5 +5,5 @@ class NoInternetConnectionException extends NetworkException {
       {required String service,
       int code = 0,
       String message = 'No internet connection.'})
-      : super(service: service, code: code, message: message);
+      : super(developerMessage: service, code: code, message: message);
 }

@@ -7,18 +7,14 @@ abstract class NetworkErrorHandlerInterceptor extends InterceptorsWrapper {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     if (_isError(response)) {
       final Exception? exception = _getExceptionFromResponse(response);
-      if (exception != null) {
-        final error = DioException(
-            requestOptions: response.requestOptions,
-            response: response,
-            error: exception,
-            stackTrace: Trace.current(),
-            type: DioExceptionType.badResponse,
-            message: response.statusMessage);
-        handler.reject(error);
-      } else {
-        super.onResponse(response, handler);
-      }
+      final error = DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          error: exception,
+          stackTrace: Trace.current(),
+          type: DioExceptionType.badResponse,
+          message: response.statusMessage);
+      handler.reject(error);
     } else {
       super.onResponse(response, handler);
     }
@@ -31,22 +27,24 @@ abstract class NetworkErrorHandlerInterceptor extends InterceptorsWrapper {
         err.type == DioExceptionType.receiveTimeout) {
       final int timeout =
           err.requestOptions.connectTimeout?.inMilliseconds ?? -1;
-      handler.reject(err.copyWith(
-        error: NetworkTimeoutException(
-            service: 'Http Interceptor', timeout: timeout),
-        stackTrace: Trace.current(),
-      ));
+      handler.reject(
+        err.copyWith(
+          error: NetworkTimeoutException(
+            timeout: timeout,
+            developerMessage: 'Http Interceptor',
+          ),
+          stackTrace: Trace.current(),
+        ),
+      );
     } else if (response != null && _isError(response)) {
       final Exception? exception = _getExceptionFromResponse(err.response);
-      if (exception != null) {
-        handler.reject(err.copyWith(
+      handler.reject(
+        err.copyWith(
           error: exception,
           stackTrace: Trace.current(),
           type: DioExceptionType.badResponse,
-        ));
-      } else {
-        super.onError(err, handler);
-      }
+        ),
+      );
     } else {
       super.onError(err, handler);
     }
@@ -65,22 +63,49 @@ abstract class NetworkErrorHandlerInterceptor extends InterceptorsWrapper {
       errorMessage = response?.data['error'];
     }
     if (code >= 500) {
-      return InternalErrorException(
-        service: 'Http Interceptor',
-        code: code,
-        message: errorMessage ?? response?.statusMessage,
-      );
+      if (code == 500) {
+        return InternalErrorException(
+          code: code,
+          message: errorMessage ?? response?.statusMessage,
+          developerMessage: 'Http Interceptor',
+        );
+      } else {
+        return Network5XXException(
+          code: code,
+          message: errorMessage ?? response?.statusMessage,
+          developerMessage: 'Http Interceptor',
+        );
+      }
     } else if (code >= 400) {
       if (code == 400) {
         return BadRequestException(
-          service: 'Http Interceptor',
+          code: code,
           message: errorMessage ?? response?.statusMessage,
+          developerMessage: 'Http Interceptor',
+        );
+      } else if (code == 401) {
+        return SessionExpiredException(
+          code: code,
+          message: errorMessage ?? response?.statusMessage,
+          developerMessage: 'Http Interceptor',
+        );
+      } else if (code == 403) {
+        return AuthorizedNotFoundException(
+          code: code,
+          message: errorMessage ?? response?.statusMessage,
+          developerMessage: 'Http Interceptor',
         );
       } else if (code == 404) {
         return NotFoundException(
-          service: 'Http Interceptor',
           code: code,
           message: errorMessage ?? response?.statusMessage,
+          developerMessage: 'Http Interceptor',
+        );
+      } else {
+        return Network4XXException(
+          code: code,
+          message: errorMessage ?? response?.statusMessage,
+          developerMessage: 'Http Interceptor',
         );
       }
     }

@@ -2,12 +2,9 @@ import 'package:falconnect/lib.dart';
 
 class NetworkTimeoutException extends Network4XXException {
   const NetworkTimeoutException({
-    required String service,
-    int code = 408,
+    super.code = 408,
+    super.developerMessage,
     int? timeout,
     String? message,
-  }) : super(
-            service: service,
-            code: code,
-            message: message ?? 'Connecting timed out. [$timeout]');
+  }) : super(message: message ?? 'Connecting timed out. [$timeout]');
 }
