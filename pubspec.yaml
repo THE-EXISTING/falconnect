@@ -12,11 +12,11 @@ dependencies:
   falmodel:
     git:
       url: https://github.com/THE-EXISTING/falmodel.git
-      ref: develop
+      ref: release/V1.0.0
   faltool:
     git:
       url: https://github.com/THE-EXISTING/faltool.git
-      ref: develop
+      ref: release/V1.0.0
 
   #PLATFORM: All
   ansicolor: ^2.0.2
