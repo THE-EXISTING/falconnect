@@ -25,10 +25,10 @@ class ConnectivityInterceptor extends InterceptorsWrapper {
   }
 
   ///========================= PRIVATE METHOD =========================///
-  bool _isNoConnectedInternet(ConnectivityResult result) {
-    return result != ConnectivityResult.wifi &&
-        result != ConnectivityResult.ethernet &&
-        result != ConnectivityResult.mobile &&
-        result != ConnectivityResult.vpn;
+  bool _isNoConnectedInternet(List<ConnectivityResult> result) {
+    return !result.contains(ConnectivityResult.wifi) &&
+        !result.contains(ConnectivityResult.ethernet) &&
+        !result.contains(ConnectivityResult.mobile) &&
+        !result.contains(ConnectivityResult.vpn);
   }
 }

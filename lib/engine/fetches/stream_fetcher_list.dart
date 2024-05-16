@@ -3,7 +3,7 @@ import 'package:falconnect/lib.dart';
 class EitherStreamFetcherList {
   final Map<dynamic, EitherStreamFetcher> _fetcherMap = {};
 
-  Stream<WidgetState<T?>> fetchStream<T>({
+  Stream<WidgetEventState<T?>> fetchStream<T>({
     required Object key,
     required Stream<Either<Failure, T>> call,
     bool debounceFetch = true,
@@ -19,7 +19,7 @@ class EitherStreamFetcherList {
     }
   }
 
-  Stream<WidgetState<T?>> fetchFuture<T>({
+  Stream<WidgetEventState<T?>> fetchFuture<T>({
     required Object key,
     required Future<Either<Failure, T>> call,
     bool debounceFetch = true,
