@@ -181,8 +181,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: develop
-      resolved-ref: "69c6278e9ca764d10708786cca22d6d3aea4ef67"
+      ref: "1.0.1"
+      resolved-ref: "3cef588eb5eaa8d404314ef385252178d5be90da"
       url: "https://github.com/THE-EXISTING/falmodel.git"
     source: git
     version: "1.0.1"
@@ -190,8 +190,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: develop
-      resolved-ref: a994389b7372299c076ab0e386e1842728b5c6b4
+      ref: "V1.0.1"
+      resolved-ref: "5d2c4deaf0089f7f81df43c94c455a599f3d80a6"
       url: "https://github.com/THE-EXISTING/faltool.git"
     source: git
     version: "1.0.1"
