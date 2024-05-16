@@ -125,7 +125,7 @@ abstract class SocketClient implements RequestSocketService {
       Log.i('Socket: PING to server');
       _channel?.sink.add('ping');
     } on StateError catch (error, stackTrace) {
-      Log.e(error, stackTrace);
+      Log.e(error, stackTrace: stackTrace);
       await createChannel();
     }
   }

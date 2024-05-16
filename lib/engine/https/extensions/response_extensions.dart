@@ -1,6 +1,4 @@
-import 'dart:async';
-import 'package:falconnect/falconnect.dart';
-import 'package:falmodel/falmodel.dart';
+import 'package:falconnect/lib.dart';
 
 extension HttpFutureDynamicExtensions<T> on Future<Response<dynamic>> {
   Future<Response<T>> mapJson<T>(
@@ -20,7 +18,7 @@ extension HttpFutureDynamicExtensions<T> on Future<Response<dynamic>> {
   }
 }
 
-extension HttpFutureResponseExtensions<T> on Future<Response<T>> {
+extension FutureResponseExtensions<T> on Future<Response<T>> {
   Future<T> unWrapResponse() {
     return then<T>((Response<T> response) {
       return Future.value(response.data);
@@ -28,11 +26,11 @@ extension HttpFutureResponseExtensions<T> on Future<Response<T>> {
   }
 
   Future<Response<T>> catchWhenError(
-      T? Function(DioError exception, StackTrace? stackTrace)? f) {
+      T? Function(DioException exception, StackTrace? stackTrace)? f) {
     return then(
       (value) => value,
       onError: (error, stackTrace) {
-        if (f != null && error is DioError) {
+        if (f != null && error is DioException) {
           final resolve = f(error, null);
           final response = error.response.transformData(data: resolve);
           return Future.value(response);
@@ -40,6 +38,14 @@ extension HttpFutureResponseExtensions<T> on Future<Response<T>> {
         throw error;
       },
     );
+  }
+}
+
+extension HttpFutureResponseExtensions<T> on Future<HttpResponse<T>> {
+  Future<T> unWrapResponse() {
+    return then<T>((HttpResponse<T> response) {
+      return Future.value(response.data);
+    });
   }
 }
 

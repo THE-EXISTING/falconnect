@@ -2,26 +2,16 @@ import 'package:falconnect/lib.dart';
 
 abstract class BaseHttpClient implements RequestApiService {
   late final Dio _dio;
-  final Connectivity _connectivity;
 
   BaseHttpClient({
     required Dio dio,
     Connectivity? connectivity,
-  })  : _dio = dio,
-        _connectivity = connectivity ?? Connectivity() {
-    //check bad certificate
-    if (_dio.httpClientAdapter is IOHttpClientAdapter) {
-      (_dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
-          (HttpClient client) {
-        client.badCertificateCallback =
-            (X509Certificate cert, String host, int port) => true;
-        return client;
-      };
-    }
-
+  }) : _dio = dio {
     setupConfig(_dio, _dio.options);
     setupInterceptors(_dio, _dio.interceptors);
   }
+
+  Dio get dio => _dio;
 
   void setupBaseUrl(String baseUrl) {
     _dio.options.baseUrl = baseUrl;
@@ -35,28 +25,28 @@ abstract class BaseHttpClient implements RequestApiService {
 
   Interceptors get interceptors => _dio.interceptors;
 
+  AccessTokenInterceptor? get tokenInterceptor =>
+      _dio.interceptors.firstOrNullWhere(
+              (interceptor) => interceptor is AccessTokenInterceptor)
+          as AccessTokenInterceptor?;
+
   bool get hasAccessToken {
-    AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
     return tokenInterceptor?.hasAccessToken == true;
   }
 
   bool get hasRefreshAccessToken {
-    AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
     return tokenInterceptor?.hasRefreshToken == true;
   }
 
   void setupAccessToken(String token) {
-    AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
     tokenInterceptor?.accessToken = token;
   }
 
   void setupRefreshToken(String token) {
-    AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
     tokenInterceptor?.refreshToken = token;
   }
 
   void clearToken() {
-    AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
     tokenInterceptor?.accessToken = null;
     tokenInterceptor?.refreshToken = null;
   }
@@ -73,12 +63,6 @@ abstract class BaseHttpClient implements RequestApiService {
     required FutureOr<T> Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
-    AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
-    tokenInterceptor?.isUseToken = isUseToken;
     return _dio
         .get(
           path,
@@ -104,12 +88,6 @@ abstract class BaseHttpClient implements RequestApiService {
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
-    AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
-    tokenInterceptor?.isUseToken = isUseToken;
     return _dio
         .post(
           path,
@@ -137,16 +115,37 @@ abstract class BaseHttpClient implements RequestApiService {
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
-    AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
-    tokenInterceptor?.isUseToken = isUseToken;
     return _dio
         .post(
           path,
           data: data,
+          options: options,
+          cancelToken: cancelToken,
+          onReceiveProgress: onReceiveProgress,
+          onSendProgress: onSendProgress,
+        )
+        .mapJson((json) => converter(json))
+        .catchWhenError(catchError);
+  }
+
+  @override
+  Future<Response<T>> patch<T>(
+    String path, {
+    BaseRequestBody? data,
+    Map<String, Object>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+    bool isUseToken = true,
+    required T Function(Map<String, dynamic> json) converter,
+    T? Function(DioException exception, StackTrace? stackTrace)? catchError,
+  }) async {
+    return _dio
+        .patch(
+          path,
+          queryParameters: queryParameters,
+          data: data?.toJson(),
           options: options,
           cancelToken: cancelToken,
           onReceiveProgress: onReceiveProgress,
@@ -170,12 +169,6 @@ abstract class BaseHttpClient implements RequestApiService {
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
-    AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
-    tokenInterceptor?.isUseToken = isUseToken;
     return _dio
         .put(
           path,
@@ -203,12 +196,6 @@ abstract class BaseHttpClient implements RequestApiService {
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
-    AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
-    tokenInterceptor?.isUseToken = isUseToken;
     return _dio
         .put(
           path,
@@ -234,12 +221,6 @@ abstract class BaseHttpClient implements RequestApiService {
     required T Function(Map<String, dynamic> json) converter,
     T? Function(DioException exception, StackTrace? stackTrace)? catchError,
   }) async {
-    final connectionResult = await _connectivity.checkConnectivity();
-    if (connectionResult == ConnectivityResult.none) {
-      throw NoInternetConnectionException(service: path);
-    }
-    AccessTokenInterceptor? tokenInterceptor = _getTokenInterceptor();
-    tokenInterceptor?.isUseToken = isUseToken;
     return _dio
         .delete(
           path,
@@ -250,12 +231,5 @@ abstract class BaseHttpClient implements RequestApiService {
         )
         .mapJson((json) => converter(json))
         .catchWhenError(catchError);
-  }
-
-  ///========================= PRIVATE METHOD =========================///
-  AccessTokenInterceptor? _getTokenInterceptor() {
-    return _dio.interceptors.firstOrNullWhere(
-            (interceptor) => interceptor is AccessTokenInterceptor)
-        as AccessTokenInterceptor?;
   }
 }

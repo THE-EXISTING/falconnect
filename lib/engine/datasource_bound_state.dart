@@ -5,14 +5,15 @@ import 'package:falconnect/lib.dart';
 class DatasourceBoundState<EntityType, ResponseType> {
   DatasourceBoundState._();
 
-  static const String TAG = 'NetworkBoundResource';
+  static const String TAG = 'DatasourceBoundState';
 
-  static Stream<BlocState<EntityType>> asStream<EntityType, ResponseType>({
+  static Stream<Either<Failure, EntityType>>
+      asStream<EntityType, ResponseType>({
     Future<EntityType> Function()? loadFromDbFuture,
     bool Function(EntityType? data)? shouldFetch,
     Future<ResponseType> Function()? createCallFuture,
     FutureOr<EntityType> Function(ResponseType response)? processResponse,
-    Future? Function(EntityType item)? saveCallResult,
+    Future? Function(EntityType entity)? saveCallResult,
     Function? error,
   }) async* {
     assert(
@@ -20,8 +21,9 @@ class DatasourceBoundState<EntityType, ResponseType> {
           (!(ResponseType == EntityType) && processResponse != null),
       'You need to specify the `processResponse` when the EntityType and ResponseType types are different',
     );
+
     ///========================= INNER METHOD =========================///
-    Stream<BlocState<EntityType>> fetchData() async* {
+    Stream<Either<Failure, EntityType>> fetchData() async* {
       if (createCallFuture != null) {
         try {
           final ResponseType response = await createCallFuture();
@@ -40,43 +42,51 @@ class DatasourceBoundState<EntityType, ResponseType> {
             await saveCallResult(data);
             NLog.i(TAG, 'Success save result data');
           }
-          yield BlocState.success(data: data);
+          yield Right(data);
         } catch (exception, stackTrace) {
           try {
             error?.call(exception, stackTrace);
           } catch (newException, stackTrace) {
-            if (newException is Exception) {
-              yield BlocState.fail(
-                  data: null, error: newException, stackTrace: stackTrace);
-              return;
+            if (newException is Failure) {
+              yield Left(newException);
+            } else if (newException is Exception) {
+              yield Left(Failure(
+                message: newException.toString(),
+                exception: newException,
+                stacktrace: stackTrace,
+              ));
             }
+            return;
           }
           NLog.e(TAG, 'Fetching failed', exception);
-          yield BlocState.fail(
-              data: null, error: exception, stackTrace: stackTrace);
+          yield Left(Failure(
+            message: exception.toString(),
+            exception: exception,
+            stacktrace: stackTrace,
+          ));
         }
         return;
       }
     }
+
     ///========================= END INNER =========================///
-    yield BlocState.loading();
     if (loadFromDbFuture != null && createCallFuture != null) {
       EntityType dataFromDb = await loadFromDbFuture();
       NLog.i(TAG, 'Success load data from database');
       if (shouldFetch != null && shouldFetch(dataFromDb)) {
-        NLog.i(TAG, 'Loading... with data from database');
-        yield BlocState.loading(data: dataFromDb);
+        NLog.i(TAG, 'Loading... data from network');
+        yield Right(dataFromDb);
         yield* fetchData();
       } else {
         NLog.i(TAG, 'Fetching data its not necessary');
-        yield BlocState.success(data: dataFromDb);
+        yield Right(dataFromDb);
       }
     } else if (loadFromDbFuture != null) {
       EntityType dataFromDb = await loadFromDbFuture();
       NLog.i(TAG, 'Success load data from database');
-      yield BlocState.success(data: dataFromDb);
+      yield Right(dataFromDb);
     } else if (createCallFuture != null) {
-      NLog.i(TAG, 'Loading...');
+      NLog.i(TAG, 'Loading... data from network');
       yield* fetchData();
     } else {
       throw UnimplementedError(
