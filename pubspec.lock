@@ -189,11 +189,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "1.1.0"
-      resolved-ref: "4f54b70a2bd3a7dc6e334c97346bca6397ff0836"
+      ref: "1.1.1"
+      resolved-ref: "117fe191a96cecb052b39060bd02e064753cb343"
       url: "https://github.com/THE-EXISTING/falmodel.git"
     source: git
-    version: "1.1.0"
+    version: "1.1.1"
   faltool:
     dependency: "direct main"
     description:
