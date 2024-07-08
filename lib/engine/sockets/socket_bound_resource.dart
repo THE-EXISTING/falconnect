@@ -7,7 +7,8 @@ class SocketBoundResource<EntityType, ResponseType> {
 
   static const String TAG = 'SocketBoundResource';
 
-  static Stream<BlocState<EntityType>> asStream<EntityType, ResponseType>({
+  static Stream<Either<Failure, EntityType>>
+      asStream<EntityType, ResponseType>({
     bool Function(EntityType? data)? whenSave,
     required Stream<ResponseType> Function() createCallStream,
     FutureOr<EntityType> Function(ResponseType result)? processResponse,
@@ -21,24 +22,35 @@ class SocketBoundResource<EntityType, ResponseType> {
     );
 
     // Start: inner function
-    void onHandleException(Object exception, StackTrace? stackTrace, EventSink<BlocState<EntityType>> sink){
-      if (exception is Exception) {
+    void onHandleException({
+      required Function? onError,
+      required Object exception,
+      required StackTrace? stackTrace,
+      required EventSink<Either<Failure, EntityType>> sink,
+    }) {
+      if (exception is Failure) {
+        sink.add(Left(exception));
+      } else if (exception is Exception) {
         try {
-          error?.call(exception, stackTrace);
-        } on Exception catch (newException) {
-          sink.add(BlocState.fail(
-              data: null, error: newException, stackTrace: stackTrace));
-          return;
+          onError?.call(exception, stackTrace);
+        } catch (newException, stackTrace) {
+          if (newException is Failure) {
+            sink.add(Left(newException));
+          } else if (newException is Exception) {
+            sink.add(Left(Failure(
+              message: newException.toString(),
+              exception: newException,
+              stacktrace: stackTrace,
+            )));
+          }
         }
         NLog.e(TAG, 'Operation failed', exception);
-        sink.add(BlocState.fail(
-            data: null, error: exception, stackTrace: stackTrace));
       }
     }
     // End: inner function
 
-    return createCallStream().transform(
-        StreamTransformer<ResponseType, BlocState<EntityType>>.fromHandlers(
+    return createCallStream().transform(StreamTransformer<ResponseType,
+        Either<Failure, EntityType>>.fromHandlers(
       handleData: (ResponseType response, sink) async {
         try {
           late EntityType data;
@@ -54,13 +66,21 @@ class SocketBoundResource<EntityType, ResponseType> {
             await saveCallResult(data);
             NLog.i(TAG, 'Success save result data');
           }
-          sink.add(BlocState.success(data: data));
+          sink.add(Right(data));
         } on Exception catch (exception, stackTrace) {
-          onHandleException(exception, stackTrace, sink);
+          onHandleException(
+              onError: error,
+              exception: exception,
+              stackTrace: stackTrace,
+              sink: sink);
         }
       },
       handleError: (exception, stackTrace, sink) {
-        onHandleException(exception, stackTrace, sink);
+        onHandleException(
+            onError: error,
+            exception: exception,
+            stackTrace: stackTrace,
+            sink: sink);
       },
       handleDone: (sink) {
         sink.close();
