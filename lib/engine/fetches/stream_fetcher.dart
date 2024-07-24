@@ -12,11 +12,13 @@ class EitherStreamFetcher<T> {
 
   bool get isClose => _streamController.isClosed;
 
+  T? _data;
+
   Stream<WidgetEventState<T?>> fetch(
     Stream<Either<Failure, T>> call,
   ) {
     _streamController
-        .add(const WidgetEventState(FullWidgetState.loading, data: null));
+        .add(WidgetEventState(FullWidgetState.loading, data: _data));
     _streamSubscription = call.listen(
       (data) {
         data.fold(
@@ -25,8 +27,9 @@ class EitherStreamFetcher<T> {
             close();
           },
           (T data) {
+            _data = data;
             _streamController
-                .add(WidgetEventState(FullWidgetState.success, data: data));
+                .add(WidgetEventState(FullWidgetState.success, data: _data));
           },
         );
       },
