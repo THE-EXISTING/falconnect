@@ -189,20 +189,20 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "1.2.0"
-      resolved-ref: d1a16d81d12ef176b08afd220d99c9a9899afbd6
+      ref: "1.2.1"
+      resolved-ref: "2eb9a843bb1bc879cf9be7e76adc04a075958fcc"
       url: "https://github.com/THE-EXISTING/falmodel.git"
     source: git
-    version: "1.2.0"
+    version: "1.2.1"
   faltool:
     dependency: "direct main"
     description:
       path: "."
-      ref: "1.0.6"
-      resolved-ref: b2c9447f90fea9e3d873aca02de7c53d1cce75db
+      ref: "1.0.7"
+      resolved-ref: "73f294c49a54cb888b038fa9879f5e4cdfb8f559"
       url: "https://github.com/THE-EXISTING/faltool.git"
     source: git
-    version: "1.0.6"
+    version: "1.0.7"
   ffi:
     dependency: transitive
     description:
