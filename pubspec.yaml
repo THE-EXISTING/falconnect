@@ -1,6 +1,6 @@
 name: falconnect
 description: A new Flutter package project.
-version: 1.2.6
+version: 1.2.7
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -11,16 +11,16 @@ dependencies:
   faltool:
     git:
       url: https://github.com/THE-EXISTING/faltool.git
-      ref: 1.0.9
+      ref: 1.0.10
   falmodel:
     git:
       url: https://github.com/THE-EXISTING/falmodel.git
-      ref: 1.2.3
+      ref: 1.2.4
 
   #PLATFORM: All
   ansicolor: ^2.0.3
   dio: ^5.7.0
-  retrofit: ^4.4.0
+  retrofit: ^4.4.1
   web_socket_channel: ^3.0.1
   connectivity_plus: ^6.0.5
 
