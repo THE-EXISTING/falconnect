@@ -10,8 +10,6 @@ abstract class AccessTokenInterceptor extends InterceptorsWrapper {
   final int retryAccessTokenLimit;
   int retryCounter;
 
-  // bool isUseToken = true;
-
   int get tokenErrorCode;
 
   bool get hasAccessToken =>
@@ -19,17 +17,6 @@ abstract class AccessTokenInterceptor extends InterceptorsWrapper {
 
   bool get hasRefreshToken =>
       refreshToken != null && refreshToken?.isNotEmpty == true;
-
-  // @override
-  // void onRequest(
-  //     RequestOptions options, RequestInterceptorHandler handler) async {
-  //   if (hasAccessToken && isUseToken) {
-  //     options.setHeaderTokenBearer(accessToken!);
-  //   } else {
-  //     options.removeHeaderToken();
-  //   }
-  //   super.onRequest(options, handler);
-  // }
 
   @protected
   @override

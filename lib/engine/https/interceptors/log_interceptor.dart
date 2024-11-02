@@ -111,7 +111,7 @@ class HttpLogInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) async {
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (!kReleaseMode) {
       if (error) {
         logPrint(_error('*** DioError ❌ ***:'));
@@ -171,7 +171,7 @@ class HttpLogInterceptor extends Interceptor {
   }
 
   static void _logPrintLong(Object? object) async {
-    if (!kReleaseMode) {
+    if (kDebugMode) {
       int defaultPrintLength = 1020;
       if (object == null || object.toString().length <= defaultPrintLength) {
         print(object);

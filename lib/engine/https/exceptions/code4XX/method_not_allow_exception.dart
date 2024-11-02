@@ -1,9 +1,10 @@
 import 'package:falconnect/lib.dart';
 
-class MethodNotAllowedException extends NetworkClientErrorException {
+class MethodNotAllowedException extends ClientErrorException {
   const MethodNotAllowedException({
     super.code = 405,
     super.developerMessage,
-    String? message,
-  }) : super(message: message ?? 'Server not found.');
+    super.message,
+    super.errors,
+  });
 }
