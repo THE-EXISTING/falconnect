@@ -1,13 +1,15 @@
 class NetworkException implements Exception {
-  final int code;
-  final String? message;
-  final String? developerMessage;
-
   const NetworkException({
     this.code = 0,
     this.message,
     this.developerMessage,
+    this.errors,
   });
+
+  final int code;
+  final String? message;
+  final String? developerMessage;
+  final List<Exception>? errors;
 
   @override
   String toString() {
@@ -21,6 +23,10 @@ class NetworkException implements Exception {
     if (developerMessage != null && developerMessage!.isNotEmpty) {
       msg += '[$developerMessage]\n';
     }
+
+    errors?.forEach(
+      (error) => msg += '   ${error.toString()}]\n',
+    );
 
     return msg;
   }

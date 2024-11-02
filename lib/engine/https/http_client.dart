@@ -7,7 +7,7 @@ abstract class BaseHttpClient implements RequestApiService {
     required Dio dio,
     Connectivity? connectivity,
   }) : _dio = dio {
-    setupConfig(_dio, _dio.options);
+    setupOptions(_dio, _dio.options);
     setupInterceptors(_dio, _dio.interceptors);
   }
 
@@ -17,7 +17,7 @@ abstract class BaseHttpClient implements RequestApiService {
     _dio.options.baseUrl = baseUrl;
   }
 
-  void setupConfig(Dio dio, BaseOptions config) {}
+  void setupOptions(Dio dio, BaseOptions options) {}
 
   void setupInterceptors(Dio dio, Interceptors interceptors) {}
 

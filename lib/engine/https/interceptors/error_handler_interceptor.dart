@@ -66,7 +66,7 @@ abstract class NetworkErrorHandlerInterceptor extends InterceptorsWrapper {
 
     if (code >= 500) {
       if (code == 500) {
-        return InternalErrorException(
+        return InternalServerErrorException(
           code: code,
           message: errorMessage ?? response?.statusMessage,
           developerMessage: 'Http Interceptor',
@@ -96,7 +96,7 @@ abstract class NetworkErrorHandlerInterceptor extends InterceptorsWrapper {
           developerMessage: 'Http Interceptor',
         );
       } else {
-        return NetworkServerErrorException(
+        return ServerErrorException(
           code: code,
           message: errorMessage ?? response?.statusMessage,
           developerMessage: 'Http Interceptor',
@@ -140,7 +140,7 @@ abstract class NetworkErrorHandlerInterceptor extends InterceptorsWrapper {
           developerMessage: 'Http Interceptor',
         );
       } else {
-        return NetworkClientErrorException(
+        return ClientErrorException(
           code: code,
           message: errorMessage ?? response?.statusMessage,
           developerMessage: 'Http Interceptor',

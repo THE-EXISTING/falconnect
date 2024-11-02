@@ -1,9 +1,10 @@
 import 'package:falconnect/lib.dart';
 
-class BadRequestException extends NetworkClientErrorException {
+class BadRequestException extends ClientErrorException {
   const BadRequestException({
     super.code = 400,
     super.developerMessage,
-    String? message,
-  }) : super(message: message ?? 'Bad request.');
+    super.message,
+    super.errors,
+  });
 }
