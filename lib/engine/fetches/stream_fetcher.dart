@@ -1,24 +1,24 @@
 import 'package:falconnect/lib.dart';
 
 class EitherStreamFetcher<T> {
-  EitherStreamFetcher([StreamController<WidgetEventState<T?>>? controller])
+  EitherStreamFetcher([StreamController<WidgetStateEvent<T?>>? controller])
       : _streamController =
-            controller ?? StreamController<WidgetEventState<T?>>();
+            controller ?? StreamController<WidgetStateEvent<T?>>();
 
-  final StreamController<WidgetEventState<T?>> _streamController;
+  final StreamController<WidgetStateEvent<T?>> _streamController;
   StreamSubscription? _streamSubscription;
 
-  Stream<WidgetEventState<T?>> get stream => _streamController.stream;
+  Stream<WidgetStateEvent<T?>> get stream => _streamController.stream;
 
   bool get isClose => _streamController.isClosed;
 
   T? _data;
 
-  Stream<WidgetEventState<T?>> fetch(
+  Stream<WidgetStateEvent<T?>> fetch(
     Stream<Either<Failure, T>> call,
   ) {
     _streamController
-        .add(WidgetEventState(FullWidgetState.loading, data: _data));
+        .add(WidgetStateEvent(FullWidgetState.loading, data: _data));
     _streamSubscription = call.listen(
       (data) {
         data.fold(
@@ -29,7 +29,7 @@ class EitherStreamFetcher<T> {
           (T data) {
             _data = data;
             _streamController
-                .add(WidgetEventState(FullWidgetState.success, data: _data));
+                .add(WidgetStateEvent(FullWidgetState.success, data: _data));
           },
         );
       },
