@@ -45,8 +45,8 @@ class EitherStreamFetcher<T> {
     return _streamController.stream;
   }
 
-  void close() {
-    _streamSubscription?.cancel();
-    _streamController.close();
+  Future<void> close() async {
+    await _streamSubscription?.cancel();
+    await _streamController.close();
   }
 }
