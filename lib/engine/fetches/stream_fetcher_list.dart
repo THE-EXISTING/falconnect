@@ -30,10 +30,6 @@ class EitherStreamFetcherList {
         debounceFetch: debounceFetch,
       );
 
-  void _forceCloseFetcherByKey(dynamic key) {
-    final fetcher = _fetcherMap[key];
-    fetcher?.close();
-  }
 
   bool _canFetch(Object key, bool debounceFetch) {
     if (debounceFetch) {
@@ -46,7 +42,15 @@ class EitherStreamFetcherList {
     }
   }
 
-  void close() {
+  void closeSync() {
     _fetcherMap.forEach((key, fetcher) => fetcher.close());
+  }
+
+  Future<void> closeAsync() async {
+    await Future.wait(_fetcherMap
+        .mapEntries(
+          (fetcher) => fetcher.value.close(),
+        )
+        .toList());
   }
 }
